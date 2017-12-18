@@ -135,10 +135,10 @@ function extractPrincipalPlusRoleAndAssumeRole(samlattribute, SAMLAssertion) {
 		if (err) console.log(err, err.stack); // an error occurred
 		else {
 			// On succesful API response create file with the STS keys
-			var docContent = "[default] \n" +
-			"aws_access_key_id = " + data.Credentials.AccessKeyId + " \n" +
-			"aws_secret_access_key = " + data.Credentials.SecretAccessKey + " \n" +
-			"aws_session_token = " + data.Credentials.SessionToken;
+			var docContent = "[default]\n" +
+			"aws_access_key_id = " + data.Credentials.AccessKeyId + "\n" +
+			"aws_secret_access_key = " + data.Credentials.SecretAccessKey + "\n" +
+			"aws_session_token = \"" + data.Credentials.SessionToken + "\"";
 
 			// If there are no Role ARNs configured in the options panel, continue to create credentials file
 			// Otherwise, extend docContent with a profile for each specified ARN in the options panel
@@ -170,11 +170,11 @@ function assumeAdditionalRole(profileList, index, AccessKeyId, SecretAccessKey, 
 	sts.assumeRole(params, function(err, data) {
 		if (err) console.log(err, err.stack); // an error occurred
 		else {
-			docContent += " \n\n" +
-			"[" + profileList[index] + "] \n" +
-			"aws_access_key_id = " + data.Credentials.AccessKeyId + " \n" +
-			"aws_secret_access_key = " + data.Credentials.SecretAccessKey + " \n" +
-			"aws_session_token = " + data.Credentials.SessionToken;
+			docContent += "\n\n" +
+			"[" + profileList[index] + "]\n" +
+			"aws_access_key_id = " + data.Credentials.AccessKeyId + "\n" +
+			"aws_secret_access_key = " + data.Credentials.SecretAccessKey + "\n" +
+			"aws_session_token = \"" + data.Credentials.SessionToken + "\"";
 		}
 		// If there are more profiles/roles in the RoleArns dict, do another call of assumeAdditionalRole to extend the docContent with another profile
 		// Otherwise, this is the last profile/role in the RoleArns dict. Proceed to creating the credentials file
